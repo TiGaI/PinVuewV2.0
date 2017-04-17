@@ -1,11 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
-import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body, Button } from 'native-base';
-import Swiper from 'react-native-swiper';
-import randomcolor from 'randomcolor';
-import Icon from 'react-native-vector-icons/Ionicons';
+// import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body, Button } from 'native-base';
 
+import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/initialAction';

@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
-import { Item, Input, Tab, Tabs,Spinner, List, ListItem } from 'native-base';
-import Swiper from 'react-native-swiper';
-import randomcolor from 'randomcolor';
+// import { Item, Input, Tab, Tabs,Spinner, List, ListItem } from 'native-base';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { connect } from 'react-redux';
