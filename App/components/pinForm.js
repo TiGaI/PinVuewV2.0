@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet,
   Text, View, TextInput, TouchableOpacity, NavigatorIOS,
   ListView, Alert, AsyncStorage, TouchableHighlight, ImagePickerIOS, Image } from 'react-native';
-  // import { Container, Content, Left, Body, Header, Right, ListItem, Thumbnail, Card, Title, CardItem, Item, Input, Label,  Button} from 'native-base';
+  import { Container, Content, Left, Body, Header, Right, ListItem, Thumbnail, Card, Title, CardItem, Item, Input, Label,  Button} from 'native-base';
 
   import { connect } from 'react-redux';
   import { bindActionCreators } from 'redux';

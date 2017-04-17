@@ -5,7 +5,8 @@ import {
 import Modal from 'react-native-modalbox';
 
 import { Button, List, SocialIcon, Icon} from 'react-native-elements'
-// import { Container, Content, Card, CardItem, Text, Body, Spinner, Radio, ListItem} from 'native-base';
+import { Container, Content, Card, CardItem, Text, Body, Spinner, Radio, ListItem} from 'native-base';
+
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/goalandnotificationAction';
 import { connect } from 'react-redux';

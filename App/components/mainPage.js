@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
-// import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body } from 'native-base';
+import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body } from 'native-base';
 import Icons from 'react-native-vector-icons/Ionicons';
 
 import { connect } from 'react-redux';
@@ -31,7 +31,6 @@ const LONGITUDE = 1;
 
 const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-
 class MainPage extends Component {
 
 
@@ -105,10 +104,6 @@ class MainPage extends Component {
     })
   }
   render() {
-    // console.log('LAT initialPosition2', this.state.initialPosition.latitude )
-    // // console.log('LONG initialPosition2', this.state.initialPosition.longitude )
-    // console.log('LAT currentPosition2', this.state.currentPosition.latitude )
-    // console.log('LONG currentPosition2', this.state.currentPosition.longitude )
     return(
       <View style={{flex: 1}}>
       {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
@@ -192,8 +187,6 @@ class Categories extends Component {
       dataSource: ds.cloneWithRows(sports),
 
     }
-    console.log('CATEGORIESSSSSSS PROPS', this.props)
-
   }
   selectCategory(rowData){
     console.log('Categories', rowData)

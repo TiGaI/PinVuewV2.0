@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import styles from './styles';
 import { connect } from 'react-redux';
 import IndexPage from './index';
-// import ProfilePage from './myProfilePage';
+import ProfilePage from './myProfilePage';
 import Goals from './goals';
 
 class ApplicationTabs extends Component {

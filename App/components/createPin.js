@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
-// import { Item, Input, Tab, Tabs,Spinner, List, ListItem } from 'native-base';
+import { Item, Input, Tab, Tabs,Spinner, List, ListItem } from 'native-base';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -10,7 +10,6 @@ import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/initialAction';
 import * as loginAction from '../actions/loginAction';
 import MapView from 'react-native-maps';
-
 
 //Import navigation components
 import PinForm from './pinForm'
