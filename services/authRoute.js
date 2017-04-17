@@ -28,7 +28,7 @@ router.post('/facebookAuth', function(req, res) {
                     bio: profile.about,
                     profileImg: profile.picture ? profile.picture.data.url : 'http://shurl.esy.es/y'
                 });
-                newUser.save(function(err) {
+                newUser.save(function(err, user) {
                     if (err) console.log(err);
                     res.send(user)
                     return {err, user}
