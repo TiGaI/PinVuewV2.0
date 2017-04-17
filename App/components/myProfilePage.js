@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
   AppRegistry, ScrollView, StyleSheet, View, TextInput, TouchableOpacity, NavigatorIOS,
-  ListView, Alert, Image, Animated, Dimensions } from 'react-native';
+  ListView, ListViewDataSource, Alert, Image, Animated, Dimensions } from 'react-native';
 import { Container, Content, Left, Body, Right, Text, ListItem, Thumbnail, Card, CardItem, Tabs, Tab } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
@@ -9,16 +9,17 @@ import styles from './styles';
 import MapView from 'react-native-maps';
 import { Button, SocialIcon } from 'react-native-elements'
 
+var {height, width} = Dimensions.get('window');
+
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/initialAction';
 import * as loginAction from '../actions/loginAction';
 
 
 import { connect } from 'react-redux';
+
+//Import navigation components
 import DailyMap from './dailyMap';
-
-var { width, height } = Dimensions.get('window');
-
 
 
 
@@ -41,7 +42,7 @@ class ProfilePage extends Component{
   constructor(props){
     super(props)
     // this.props.actions.getAllUserActivities(this.props.profile.userObject._id)
-    this.props.loginActions.getGraphData(this.props.profile.userObject._id, this.props.profile.userObject.myActivity)
+    // this.props.loginActions.getGraphData(this.props.profile.userObject._id, this.props.profile.userObject.myActivity)
     console.log('PROFILE PAGE PROPSSSSS', this.props)
   }
   viewStyle() {
@@ -93,16 +94,7 @@ class ProfilePage extends Component{
 
     return (
         <View style={{flex: 1}}>
-        { x === x ? (  <Swiper
-            loop={false}
-            showsPagination={false}
-            index={1}>
-
-            <Swiper
-              horizontal={false}
-              loop={false}
-              showsPagination={false}
-              index={1}>
+        { x === x ? (
               <View style={this.viewStyle()}>
                 <Container>
                   <Content>
@@ -126,14 +118,14 @@ class ProfilePage extends Component{
                       <Icon style={{flex: 1,fontSize: 35, color: '#FF514E', textAlign: 'center'}} name='md-pin'></Icon>
                       <View style={{flex: 2}}>
                       <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 12, marginTop: 5}}>Pins Created</Text>
-                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>{totalHours}</Text>
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>{totalPins}</Text>
                       </View>
                       </View>
                       <View style={{flex: 1, flexDirection: 'row'}}>
                       <Icon style={{flex: 1,fontSize: 35, color: '#41A36A', textAlign: 'center'}} name='ios-timer'></Icon>
                       <View style={{flex: 2}}>
                       <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 12, marginTop: 5}}>Pinned Hours</Text>
-                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>{totalPins}</Text>
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>{totalHours}</Text>
                       </View>
                       </View>
                       </View>
@@ -144,7 +136,7 @@ class ProfilePage extends Component{
                           renderRow={(rowData) => <View style={{backgroundColor: '#07263B', marginBottom: 5, padding: 0, backgroundColor: 'grey'}}>
                                     {console.log('ROOOWWWW', rowData)}
                                     <View style={{backgroundColor: '#28B19D', width: width, padding: 7}}>
-                                      <Text style={{fontSize: 20, fontWeight: '600', color: 'white'}}>STATS OVERVIEW</Text>
+                                      <Text style={{fontSize: 16, fontWeight: '600', color: 'white'}}>STATS OVERVIEW</Text>
                                     </View>
                                   <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', padding: 15, backgroundColor: '#07263B'}}>
                                   <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
@@ -192,7 +184,7 @@ class ProfilePage extends Component{
                                           <Text style={{color: 'black',fontSize: 15, backgroundColor: 'transparent'}}>{(!rowData.Relaxing) ? (0) : (rowData.Relaxing.totalHoursForThisCategory)}</Text>
                                         </View>
                                   </View>
-                                  <View style={{flex: 1, marginTop: 5, marginBottom: 10}}>
+                                  <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
                                         <Text style={{color: 'white', fontSize: 15}}>Studying</Text>
                                         <View style={styled.data}>
 
@@ -204,10 +196,10 @@ class ProfilePage extends Component{
 
                                   </View>
                                   <View style={{backgroundColor: '#FC4F48', width: width, padding: 7}}>
-                                    <Text style={{fontSize: 20, fontWeight: '600', color: 'white'}}>DAILY OVERVIEW</Text>
+                                    <Text style={{fontSize: 16, fontWeight: '600', color: 'white'}}>DAILY OVERVIEW</Text>
                                   </View>
 
-                                  <View style={{flexDirection: 'row',backgroundColor: '#07263B', padding: 10}}>
+                                  <View style={{flexDirection: 'row',backgroundColor: '#07263B', padding: 7}}>
                                     <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-pie'>{"\n"}<Text style={{color: 'white', fontSize: 12}}>Hours {rowData.totalHoursPerDay}</Text></Icon>
                                     <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-pin'>{"\n"}<Text style={{color: 'white', fontSize: 12}}>Pins {rowData.totalPinsPerDay}</Text></Icon>
                                     <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-calendar'>{"\n"}<Text style={{color: 'white', fontSize: 12}}>{rowData.date}</Text></Icon>
@@ -225,11 +217,6 @@ class ProfilePage extends Component{
                   </Content>
                 </Container>
               </View>
-
-
-            </Swiper>
-
-          </Swiper>
 ) : (
 
   <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#00A8BE'}}>
@@ -260,6 +247,7 @@ class ProfilePage extends Component{
     )
   }
 }
+
 
 
 // ProfilePage.propTypes = {
