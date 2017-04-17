@@ -7,6 +7,15 @@
     "test": "jest"
   },
   "dependencies": {
+    "body-parser": "^1.17.1",
+    "compression": "^1.6.2",
+    "express": "^4.15.2",
+    "helmet": "^3.5.0",
+    "http": "0.0.0",
+    "moment": "^2.18.1",
+    "mongoose": "^4.9.1",
+    "underscore": "^1.8.3",
+    "socket.io": "^1.7.3",
     "immutable": "^3.8.1",
     "native-base": "^2.1.2",
     "react": "16.0.0-alpha.6",
