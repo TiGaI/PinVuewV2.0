@@ -2,8 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, TouchableHighlight, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
 import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Right, Body } from 'native-base';
-import Swiper from 'react-native-swiper';
-import randomcolor from 'randomcolor';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { connect } from 'react-redux';
@@ -17,7 +16,7 @@ import MapView from 'react-native-maps';
 
 
 
-// var { width, height } = Dimensions.get('window');
+var { width, height } = Dimensions.get('window');
 // const ASPECT_RATIO = width / height;
 //
 // const LATITUDE = 1;

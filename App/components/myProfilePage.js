@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
   AppRegistry, ScrollView, StyleSheet, View, TextInput, TouchableOpacity, NavigatorIOS,
-  ListView, Alert, Image, Animated } from 'react-native';
+  ListView, Alert, Image, Animated, Dimensions } from 'react-native';
 import { Container, Content, Left, Body, Right, Text, ListItem, Thumbnail, Card, CardItem, Tabs, Tab } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
@@ -16,6 +16,9 @@ import * as loginAction from '../actions/loginAction';
 
 import { connect } from 'react-redux';
 import DailyMap from './dailyMap';
+
+var { width, height } = Dimensions.get('window');
+
 
 
 
