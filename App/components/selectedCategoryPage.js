@@ -48,7 +48,7 @@ class SelectedCategory extends Component {
 
     }
     console.log('TESTING',this.props.category, this.props.longitude, this.props.latitude )
-    this.props.actions.getPingAroundMe(this.props.category, this.props.longitude, this.props.latitude )
+    this.props.actions.getPingAroundMe(this.props.category, this.props.latitude , this.props.longitude,)
   }
   componentDidMount(){
     navigator.geolocation.getCurrentPosition(
@@ -158,7 +158,7 @@ class SelectedCategory extends Component {
 
 
       </MapView>
-    ) : (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><Spinner color='blue' /></View> )}
+    ) : (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><Text>fmlekafmleamlf</Text></View> )}
       </View>
     )
   }

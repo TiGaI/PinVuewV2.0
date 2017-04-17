@@ -103,6 +103,30 @@ router.post('/getSortandGroupActivity', function(req, res){
     });
 });
 
+router.post('/getPingsAroundMe', function(req, res){
+  console.log('GET PINGS SERVER')
+    var range = getRangeofLonLat(req.body.lon, req.body.lat, 5);
+    console.log('REQQQQQSSS',req.body.lon,  req.body.lat, req.body.category)
+
+    Activity.find({$and: [
+          {'activityLatitude': {'$gte': range.minLatitude, '$lt': range.maxLatitude}},
+          {'activityLongitude': {'$gte': range.minLongitude, '$lt': range.maxLongitude}},
+          {'activityCategory' : {'$in': req.body.category}}
+        ]}).sort('-createdAt').limit(20).exec(function(err, activities){
+
+          console.log('activities: ', activities)
+
+          if(err){
+            console.log(err, 'errororororororro');
+            res.send(err);
+            return err
+          }
+          res.send(activities);
+          console.log('SENT')
+          return activities;
+    });
+});
+
 router.post('/editActivity', function(req,res){
   var activity = req.body.activity;
   var activityCreatorId = req.body.activityCreatorId;
