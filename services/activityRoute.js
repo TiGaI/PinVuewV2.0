@@ -122,7 +122,7 @@ router.post('/getPingsAroundMe', function(req, res){
             return err
           }
           res.send(activities);
-          console.log('SENT')
+          console.log('SENT',activities )
           return activities;
     });
 });
@@ -150,6 +150,7 @@ router.post('/deleteActivity', function(req,res){
   var activityCreatorId = req.body.activityCreatorId;
   var activityId = req.body.activityID;
   Activity.findByIdAndRemove(activityId, function(err, newActivity){
+    User.findByIdAndRemove()
     if(err){
       console.log(err);
       res.send(err);

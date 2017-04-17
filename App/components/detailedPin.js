@@ -63,14 +63,14 @@ class DetailedPin extends Component {
     })
   }
   render(){
-    var userHasJoined;
-    if(this.props.profile.userObject !== null && this.props.marker.checkInUser.length > 0){
-      this.props.marker.checkInUser.map(function(x){
-        if(x === this.props.profile.userObject._id.bind(this)){
-          var userHasJoined = 1;
-        }
-      })
-    }
+    // var userHasJoined;
+    // if(this.props.profile.userObject !== null && this.props.marker.checkInUser.length > 0){
+    //   this.props.marker.checkInUser.map(function(x){
+    //     if(x === this.props.profile.userObject._id.bind(this)){
+    //       var userHasJoined = 1;
+    //     }
+    //   })
+    // }
 
     return (
       <View style={{flex: 1}}>
@@ -96,7 +96,6 @@ class DetailedPin extends Component {
         <Text>Description: {this.props.marker.activityDescription}</Text>
         <Text>Duration: {this.props.marker.activityDuration} hr(s)</Text>
         <Text>Start Time: {this.props.marker.activityStartTime}</Text>
-        <Text>Spots Available {this.props.marker.activityCapacity - this.props.marker.checkInUser.length}</Text>
         {this.props.profile.userObject._id !== this.props.marker.activityCreator[0] ? (<View>{this.state.leave === false && userHasJoined ? <Button block success onPress={this.join.bind(this)}>
                         <Text> Join </Text>
         </Button> : <Button block danger onPress={this.leave.bind(this)}>
