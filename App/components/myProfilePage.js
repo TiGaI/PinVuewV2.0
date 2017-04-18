@@ -44,6 +44,7 @@ class ProfilePage extends Component{
     // this.props.actions.getAllUserActivities(this.props.profile.userObject._id)
     // this.props.loginActions.getGraphData(this.props.profile.userObject._id, this.props.profile.userObject.myActivity)
     console.log('PROFILE PAGE PROPSSSSS', this.props)
+
   }
   viewStyle() {
     return {
@@ -52,6 +53,7 @@ class ProfilePage extends Component{
       justifyContent: 'center'
     }
   }
+
   category(){
     this.props.navigator.push({
       component: Categories,

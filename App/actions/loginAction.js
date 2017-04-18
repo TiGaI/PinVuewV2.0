@@ -26,7 +26,6 @@ export function getGraphData(userID, myActivity) {
             .then((responseJson) => {
 
                 var userObject = Object.assign({}, responseJson);
-                console.log('GET INSIDE ACTION IN RESPONSE GET GRAPH DATA',userObject )
                 dispatch(addUser(userObject));
             })
             .catch((err) => {
@@ -70,8 +69,6 @@ export function googleLogin(){
 
       GoogleSignin.signIn().then((user) => {
 
-            console.log('this is user in google login: ', user)
-
             var mongooseId = '';
             fetch('http://localhost:8080/googleAuth', {
                 method: 'POST',
@@ -88,10 +85,8 @@ export function googleLogin(){
                   mongooseId = responseJson._id
                   var userObject = Object.assign({}, responseJson);
 
-                  console.log("user information from facebook: ", userObject)
-
+                  getGraphData(userObject._id, userObject.myActivity)(dispatch);
                   dispatch(loggedin());
-                  dispatch(addUser(userObject));
               })
               .catch((err) => {
                 console.log('error: ', err)
@@ -155,9 +150,9 @@ export function login() {
                 userObject["picture.height"] = result.picture.data.height;
 
                 console.log("user information from facebook: ", userObject)
-
+                getGraphData(userObject._id, userObject._myActivity)(dispatch);
                 dispatch(loggedin());
-                dispatch(addUser(userObject));
+
             })
             .catch((err) => {
               console.log('error: ', err)

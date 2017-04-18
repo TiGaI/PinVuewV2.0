@@ -3,7 +3,7 @@ import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, TouchableHighlight, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
 import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Right, Body } from 'native-base';
 
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icons from 'react-native-vector-icons/Ionicons';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -48,13 +48,43 @@ class DailyMap extends Component {
     console.log('GETS INSIDE MAP FUNTION',  this.props.dailyData)
     var x = this.props.dailyData;
     var categoryArray = ['Entertainment', 'Exercise', 'Food', 'Hobbies', 'Relaxing', 'Studying'];
+    var sports = [{name: 'Entertainment',
+                  iconName: 'ios-beer',
+                  color: 'red'
+                  },
+                  {name: 'Exercise',
+                 iconName: 'md-walk',
+                 color: 'green'
+                  },
+                   {name: 'Food',
+                 iconName: 'md-pizza',
+                 color: 'orange'
+                  },
+                   {name: 'Hobbies',
+                 iconName: 'ios-american-football',
+                 color: 'yellow'
+                  },
+                   {name: 'Relaxing',
+                 iconName: 'ios-desktop',
+                 color: 'purple'
+                  },
+                   {name: 'Studying',
+                 iconName: 'ios-book',
+                 color: 'black'
+                },
+                {name: 'Relaxing',
+                iconName: 'ios-desktop',
+                color: 'brown'
+                },
+               ];
     return categoryArray.map(function(categoryName){
+      return sports.map(function(pins){
       console.log('XXXX', x)
       for(var key in x){
         console.log("KEY", key, categoryName)
-        if(key === categoryName){
+        if(key === categoryName && key === pins.name){
           console.log('INSIDE IF', categoryName )
-          console.log('INSIDE IF CHECK ARRAY',   key.activities, x[key] )
+          console.log('INSIDE IF CHECK ARRAY',   key.activities, x[key], pins.name )
         return x[key].activities.map(function(coordinates){
           console.log('gets in map coords', coordinates)
         return(
@@ -64,7 +94,11 @@ class DailyMap extends Component {
               longitude: coordinates.activityLongitude
               }}
               title = {coordinates.activityTitle}
-           />
+              >
+              <View style={{backgroundColor: pins.color,
+                borderRadius: 22.5, borderWidth: 3, borderColor: pins.color, height: 40, width: 40, padding: 5, justifyContent: 'center', alignItems: 'center'}}>
+              <Icons style={{fontSize: 25, color: 'white', backgroundColor: 'transparent'}} name={pins.iconName}/>
+            </View></MapView.Marker>
           </View>
         );
         console.log('SUCCCESSS')
@@ -72,6 +106,8 @@ class DailyMap extends Component {
       }
 
     }
+
+    })
     })
   }
   test(){

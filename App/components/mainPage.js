@@ -36,7 +36,6 @@ class MainPage extends Component {
 
   constructor(props){
     super(props);
-      console.log('MAINPAGE PROPSSSSSS', this.props);
     this.state = {
       initialPosition: {
         latitude: LATITUDE,
@@ -104,6 +103,7 @@ class MainPage extends Component {
     })
   }
   render() {
+    console.log(this.props)
     return(
       <View style={{flex: 1}}>
       {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (

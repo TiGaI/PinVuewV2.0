@@ -150,6 +150,7 @@ router.post('/deleteActivity', function(req,res){
   var activityCreatorId = req.body.activityCreatorId;
   var activityId = req.body.activityID;
   Activity.findByIdAndRemove(activityId, function(err, newActivity){
+    User.findByIdAndRemove()
     if(err){
       console.log(err);
       res.send(err);
