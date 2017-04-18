@@ -150,7 +150,7 @@ export function login() {
                 userObject["picture.height"] = result.picture.data.height;
 
                 console.log("user information from facebook: ", userObject)
-                getGraphData(userObject._id, userObject._myActivity)(dispatch);
+                getGraphData(userObject._id, userObject.myActivity)(dispatch);
                 dispatch(loggedin());
 
             })
