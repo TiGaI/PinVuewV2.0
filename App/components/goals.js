@@ -27,7 +27,12 @@ class Goals extends Component{
       value: 1,
       selectedItem : 2,
       editGoalID: ' ',
-      itemList: ['Studing', 'Hobbies', 'Sleeping']
+      itemList: ['Entertainment',
+      'Exercise',
+      'Food',
+      'Hobbies',
+      'Relaxing',
+      'Studying']
     };
   }
   onPikcerSelect(index){
@@ -80,6 +85,7 @@ class Goals extends Component{
   }
   render() {
     var goalObject = this.props.goal.myGoals
+    console.log(this.props.profile.userObject)
     if(goalObject){
 
       var goals = goalObject.map((x) => {

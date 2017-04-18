@@ -34,9 +34,6 @@ export function getGraphData(userID, myActivity) {
             });
 
         }
-      // ).catch((err) => {
-      //       dispatch(errors(err));
-      // });
     };
 
 

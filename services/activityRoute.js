@@ -122,7 +122,7 @@ router.post('/getPingsAroundMe', function(req, res){
             return err
           }
           res.send(activities);
-          console.log('SENT')
+          console.log('SENT',activities )
           return activities;
     });
 });

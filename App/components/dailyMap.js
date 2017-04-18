@@ -11,11 +11,6 @@ import * as actionCreators from '../actions/initialAction';
 import * as loginAction from '../actions/loginAction';
 import MapView from 'react-native-maps';
 
-//Import navigation components
-
-
-
-
 var { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 

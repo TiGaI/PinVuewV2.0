@@ -47,7 +47,7 @@ class SelectedCategory extends Component {
       },
 
     }
-    console.log('TESTING',this.props.category, this.props.longitude, this.props.latitude )
+    console.log('TESTING',this.props.category, 'LAT ',this.props.latitude, "LONG",  this.props.longitude )
     this.props.actions.getPingAroundMe(this.props.category, this.props.latitude , this.props.longitude,)
   }
   componentDidMount(){
