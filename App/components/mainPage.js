@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
-import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body } from 'native-base';
+import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body, Fab } from 'native-base';
 import Icons from 'react-native-vector-icons/Ionicons';
 
 import { connect } from 'react-redux';
@@ -29,7 +29,7 @@ const ASPECT_RATIO = width / height;
 const LATITUDE = 1;
 const LONGITUDE = 1;
 
-const LATITUDE_DELTA = 0.03;
+const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 class MainPage extends Component {
 
@@ -49,6 +49,7 @@ class MainPage extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
+      active: 'true'
 
     }
   }
@@ -103,81 +104,97 @@ class MainPage extends Component {
     })
   }
   render() {
-    console.log(this.props)
+    console.log('dakmdsamldamdasmdlsaalmdm', this.props, this.state.currentPosition.latitude,this.state.currentPosition.longitude )
     return(
       <View style={{flex: 1}}>
-      {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
-
-      <MapView
-       resizeMode = "stretch"
-        style={{flex: 1, height: null, width: null}}
-        initialRegion={{
-          latitude: this.state.currentPosition.latitude,
-          longitude: this.state.currentPosition.longitude,
-          latitudeDelta: this.state.currentPosition.latitudeDelta,
-          longitudeDelta: this.state.currentPosition.longitudeDelta,
-        }}
-      >
-       <MapView.Marker
-         coordinate={{latitude: this.state.currentPosition.latitude,
-         longitude: this.state.currentPosition.longitude,
-         latitudeDelta: this.state.currentPosition.latitudeDelta,
-         longitudeDelta: this.state.currentPosition.longitudeDelta,
-         }}
-         title='Title'
-      />
-      <View style={{flex: 0, alignItems: 'center'}}>
-        <TouchableOpacity onPress={this.category.bind(this)}>
-              <Text
-              style={{borderColor: 'white', borderWidth: 1,borderColor: 'transparent', backgroundColor: '#00A8BE', width: 275,
-              padding: 15, color: 'white', textAlign: 'center', fontSize: 20, marginTop: 100}}
-              placeholder= 'Select a category'
-              >Find things to do... {this.state.lastPosition}</Text>
-        </TouchableOpacity >
-      {this.props.profile.userObject !== null ? (<View style={{flex: 0, justifyContent: 'flex-end'}}>
-
-          <Icon
-            raised
-            name='touch-app'
-            color='#FD4F0D'
-            onPress={() => this.createPin()} />
-
-      <Text style={{fontSize: 12, backgroundColor: 'transparent', fontWeight: '500' , marginTop: 0}}>Add Location</Text>
+        {this.state.currentPosition.latitude !== 1 ? (
+          <MapView
+           resizeMode = "stretch"
+            style={{flex: 1, height: null, width: null}}
+            initialRegion={{
+              latitude: this.state.currentPosition.latitude,
+              longitude: this.state.currentPosition.longitude,
+              latitudeDelta: this.state.currentPosition.latitudeDelta,
+              longitudeDelta: this.state.currentPosition.longitudeDelta,
+            }}
+          >
+           <MapView.Marker
+             coordinate={{latitude: this.state.currentPosition.latitude,
+             longitude: this.state.currentPosition.longitude,
+             latitudeDelta: this.state.currentPosition.latitudeDelta,
+             longitudeDelta: this.state.currentPosition.longitudeDelta,
+             }}
+             title='Title'
+             >
 
 
-      </View>) : null }
+             <Icons style={{fontSize: 40, color: '#00A8BE', backgroundColor: 'transparent'}} name='md-pin'/>
+           </MapView.Marker>
+
+
+          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <TouchableOpacity onPress={this.category.bind(this)}>
+                  <Text
+                  style={{borderColor: 'white', borderWidth: 1,borderColor: 'transparent', backgroundColor: '#00A8BE', width: 275,
+                  padding: 15, color: 'white', textAlign: 'center', fontSize: 20, marginTop: 100}}
+                  placeholder= 'Select a category'
+                  >Find things to do... {this.state.lastPosition}</Text>
+            </TouchableOpacity >
+          <View style={{flex: 1, justifyContent: 'center'}}>
+
+              <Icon
+                raised
+                name='touch-app'
+                color='#FD4F0D'
+                onPress={() => this.createPin()} />
+
+          <Text style={{fontSize: 12, backgroundColor: 'transparent', fontWeight: '500' , marginTop: 0}}>Add Location</Text>
+
+
+          </View>
+
+          </View>
+
+          </MapView>
+
+        ) : ( <View>
+          <Text>Loading...</Text>
+        </View>)}
 
       </View>
-
-      </MapView>
-    ) : null}
-      </View>
-    )
-  }
+      )
 }
+}
+
 var sports = [{name: 'Entertainment',
-              iconName: 'ios-beer'
+              iconName: 'ios-beer',
+              color: 'red'
               },
               {name: 'Exercise',
-             iconName: 'md-walk'
+             iconName: 'md-walk',
+             color: 'green'
               },
                {name: 'Food',
-             iconName: 'md-pizza'
+             iconName: 'md-pizza',
+             color: 'orange'
               },
                {name: 'Hobbies',
-             iconName: 'ios-american-football'
+             iconName: 'ios-american-football',
+             color: 'yellow'
               },
                {name: 'Relaxing',
-             iconName: 'ios-desktop'
+             iconName: 'ios-desktop',
+             color: 'purple'
               },
                {name: 'Studying',
-             iconName: 'ios-book'
+             iconName: 'ios-book',
+             color: 'black'
             },
             {name: 'Relaxing',
-            iconName: 'ios-desktop'
+            iconName: 'ios-desktop',
+            color: 'brown'
             },
            ];
-
 
 class Categories extends Component {
   constructor(props){

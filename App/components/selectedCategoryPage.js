@@ -150,7 +150,7 @@ class SelectedCategory extends Component {
       <View style={{flex: 0, alignItems: 'center'}}>
       <TouchableOpacity onPress={this.category.bind(this)}>
       <Text
-      style={{borderColor: 'white', borderWidth: 1,borderColor: 'transparent', marginTop: 45, backgroundColor: '#00A8BE', padding: 15, color: 'white', textAlign: 'center', fontSize: 20, borderRadius: 10}}
+      style={{borderColor: 'white', borderWidth: 1,borderColor: 'transparent', marginTop: 75, backgroundColor: '#00A8BE', padding: 10, color: 'white', textAlign: 'center', fontSize: 20, borderRadius: 10}}
       placeholder= 'Select a category'
       >{this.props.category}</Text>
       </TouchableOpacity>
@@ -158,7 +158,7 @@ class SelectedCategory extends Component {
 
 
       </MapView>
-    ) : (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><Text>fmlekafmleamlf</Text></View> )}
+    ) : (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><Text style={{fontSize: 16, fontWeight: '500'}}>You have no pins created for this category</Text></View> )}
       </View>
     )
   }

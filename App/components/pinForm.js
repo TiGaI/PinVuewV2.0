@@ -6,11 +6,11 @@ import { AppRegistry, ScrollView, StyleSheet,
 
   import { connect } from 'react-redux';
   import { bindActionCreators } from 'redux';
-
+var Slider = require('react-native-slider');
 
   import * as actionCreators from '../actions/initialAction';
   import * as loginAction from '../actions/loginAction';
-  import Icon from 'react-native-vector-icons/Ionicons';
+  import Icons from 'react-native-vector-icons/Ionicons';
 
 
   //Import navigation components
@@ -56,8 +56,8 @@ import { AppRegistry, ScrollView, StyleSheet,
     activityTitle: t.String,
     activityDescription: t.String,
     activityCategory: nameofthecategory,
-    activityStartTime: t.Date,
-    activityDuration: numberofhours
+    // activityStartTime: t.Date,
+    // activityDuration: numberofhours
   });
 
   var options = {
@@ -71,9 +71,9 @@ import { AppRegistry, ScrollView, StyleSheet,
         error: 'Title Required'
       },
       activityDescription: {
-        label: 'Description',
-        placeholder: 'Activity Description',
-        error: 'Description Required'
+        label: 'Status',
+        placeholder: 'Activity Status',
+        error: 'Status Required'
       },
       activityCategory: {
         label: 'Select Category',
@@ -109,6 +109,7 @@ import { AppRegistry, ScrollView, StyleSheet,
           activityDescription: "",
           activityCategory: ""
         },
+        values: 0,
         position: {
           latitude: this.props.latitude,
           longitude: this.props.longitude
@@ -120,6 +121,53 @@ import { AppRegistry, ScrollView, StyleSheet,
     submitForm(){
     },
 
+    categoryList(){
+      var sports = [{name: 'Entertainment',
+                    iconName: 'ios-beer',
+                    color: 'red'
+                    },
+                    {name: 'Exercise',
+                   iconName: 'md-walk',
+                   color: 'green'
+                    },
+                     {name: 'Food',
+                   iconName: 'md-pizza',
+                   color: 'orange'
+                    },
+                     {name: 'Hobbies',
+                   iconName: 'ios-american-football',
+                   color: 'yellow'
+                    },
+                     {name: 'Relaxing',
+                   iconName: 'ios-desktop',
+                   color: 'purple'
+                    },
+                     {name: 'Studying',
+                   iconName: 'ios-book',
+                   color: 'black'
+                  },
+                  {name: 'Relaxing',
+                  iconName: 'ios-desktop',
+                  color: 'brown'
+                  },
+                 ];
+        return sports.map(function(category){
+          return (
+            <View style={{alignItems: 'center'}}>
+            <View style={{backgroundColor: category.color,
+              borderRadius: 22.5, height: 40, width: 40, padding: 5, justifyContent: 'center', alignItems: 'center'}}>
+              <Icons style={{fontSize: 25, color: 'white', backgroundColor: 'transparent'}} name={category.iconName}>
+
+              </Icons>
+          </View>
+          <Text style={{fontSize: 10}}>{category.name}</Text>
+          </View>
+          )
+
+        })
+
+
+    },
 
     pickImage() {
       // openSelectDialog(config, successCallback, errorCallback);
@@ -199,6 +247,8 @@ import { AppRegistry, ScrollView, StyleSheet,
         var value = this.refs.form.getValue();
         if (value) {
           var activityObject = Object.assign({}, value);
+          activityObject.activityStartTime = new Date();
+          activityObject.activityDuration = this.state.values;
           activityObject.activityLatitude = this.props.latitude;
           activityObject.activityLongitude = this.props.longitude;
           activityObject.activityCreator = this.props.profile.userObject._id;
@@ -251,21 +301,19 @@ import { AppRegistry, ScrollView, StyleSheet,
           value={this.state.value}
           onChange ={this.onChange.bind(this)}
           />
-          <View style={{flex: 1, flexDirection: 'row'}}>
-          <TouchableOpacity style={{flex: 1, backgroundColor: 'white' ,borderWidth: 2, borderColor: 'grey', height: 70, borderRightWidth: 0}} onPress={this.pickImage}>
-          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Icon style={{fontSize: 35, color: 'grey'}} name='md-camera'/>
-          <Text style={{color: 'grey'}}>Upload Photo</Text>
-          </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={{flex: 1, backgroundColor: 'white' ,borderWidth: 2, borderColor: 'grey', height: 70}} onPress={this.onPress}>
-          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Icon style={{fontSize: 35, color: 'grey'}} name='md-checkmark-circle'/>
-          <Text style={{color: 'grey'}}>Submit</Text>
-          </View>
-          </TouchableOpacity>
-          </View>
-
+        <Text style={{fontSize: 16, fontWeight: '500'}}>Select Duration (Hrs)</Text>
+          <Slider
+            value={this.state.values}
+            onValueChange={(values) => this.setState({values})}
+            step={0.5}
+            maximumValue={12}
+            minimumTrackTintColor={'green'}
+            thumbTintColor={'green'}
+            thumbTouchSize={{width: 100, height: 100}} />
+          <Text>Value: {this.state.values}</Text>
+          <Button block success onPress={this.onPress} style={{marginTop: 10}}>
+              <Text style={{color: 'white', fontWeight: '500', fontSize: 20}}> Submit </Text>
+          </Button>
           </ScrollView>
 
           </View>
@@ -277,6 +325,7 @@ import { AppRegistry, ScrollView, StyleSheet,
 
     var styles = StyleSheet.create({
       container: {
+        flex: 1,
         justifyContent: 'center',
         marginTop: 20,
         padding: 20,

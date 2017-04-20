@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
 import { Item, Input, Tab, Tabs,Spinner, List, ListItem } from 'native-base';
+import Icons from 'react-native-vector-icons/Ionicons';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -105,15 +106,16 @@ createPin(){
        <MapView.Marker draggable
          coordinate={{latitude: this.state.currentPosition.latitude,
          longitude: this.state.currentPosition.longitude}}
-         title='New Pin'
-
+         title='Click and Drag. Place pin and confirm'
          onDrag={(e) => this.setState({ latitude: e.nativeEvent.coordinate.latitude,
            longitude: e.nativeEvent.coordinate.longitude,
           })}
-      />
+          >
+
+        </MapView.Marker>
         <View style={{flex: 0, marginBottom: 60, backgroundColor: 'black', width: null, height: null,
         alignItems: 'center', justifyContent: 'center', borderRadius: 15, opacity: 0.9, padding: 15}}>
-          <Text style={{color: 'white'}}>{ this.state.latitude + ',' +  this.state.longitude}</Text>
+          <Text style={{color: 'white'}}>{ this.state.currentPosition.latitude + ',' +  this.state.currentPosition.longitude}</Text>
           <TouchableOpacity onPress={this.createPin.bind(this)}>
             <Text style={{color: 'white', fontWeight: '500'}}>Confirm Pin Location</Text>
           </TouchableOpacity>
