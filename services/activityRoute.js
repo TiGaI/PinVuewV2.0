@@ -47,7 +47,7 @@ router.post('/getSortandGroupActivity', function(req, res){
     Activity.find({$and: [
       {'createdAt': {'$gt': new Date(Date.now() - 6*24*60*60*1000)}},
           {'_id' : {'$in': req.body.myActivity}}
-        ]}).sort('-createdAt').exec(function(err, activities){
+        ]}).exec(function(err, activities){
 
           if(err){
             console.log(err);

@@ -103,7 +103,7 @@ class DailyMap extends Component {
               }}
               title = {coordinates.activityTitle}
               description = {"Total Duration" + ' ' + coordinates.activityDuration + ' ' + "hrs"}
-              onPress={this.detailedPin.bind(this, coordinates)}
+            
               >
               <View style={{backgroundColor: pins.color,
                 borderRadius: 22.5, borderWidth: 3, borderColor: pins.color, height: 40, width: 40, padding: 5, justifyContent: 'center', alignItems: 'center'}}>
