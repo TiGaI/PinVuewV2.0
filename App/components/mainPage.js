@@ -136,11 +136,11 @@ class MainPage extends Component {
             <TouchableOpacity onPress={this.category.bind(this)}>
                   <Text
                   style={{borderColor: 'white', borderWidth: 1,borderColor: 'transparent', backgroundColor: '#00A8BE', width: 275,
-                  padding: 15, color: 'white', textAlign: 'center', fontSize: 20, marginTop: 100}}
+                  padding: 10, color: 'white', textAlign: 'center', fontSize: 20, marginTop: 100}}
                   placeholder= 'Select a category'
-                  >Find things to do... {this.state.lastPosition}</Text>
+                  >View your pins... {this.state.lastPosition}</Text>
             </TouchableOpacity >
-          <View style={{flex: 1, justifyContent: 'center'}}>
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
 
               <Icon
                 raised
@@ -148,7 +148,7 @@ class MainPage extends Component {
                 color='#FD4F0D'
                 onPress={() => this.createPin()} />
 
-          <Text style={{fontSize: 12, backgroundColor: 'transparent', fontWeight: '500' , marginTop: 0}}>Add Location</Text>
+              <Text style={{fontSize: 12, backgroundColor: 'transparent', fontWeight: '500' , marginTop: -5, marginBottom: 10}}>Add Location</Text>
 
 
           </View>
@@ -230,7 +230,7 @@ class Categories extends Component {
                 <ListItem>
                   <TouchableOpacity onPress={this.selectCategory.bind(this, rowData)}>
                     <Left>
-                    <Icons style={{fontSize: 30, color: 'grey', marginRight: 10}} name={rowData.iconName}/>
+                    <Icons style={{fontSize: 30, color: 'grey', marginRight: 10, color: rowData.color, width: 30}} name={rowData.iconName}/>
                     <Text style={{marginTop: 8}}>{rowData.name}</Text>
                     </Left>
 

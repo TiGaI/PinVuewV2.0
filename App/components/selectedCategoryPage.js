@@ -138,7 +138,7 @@ class SelectedCategory extends Component {
       >
         <MapView.Callout style={{width:120, height:35}}>
           <TouchableOpacity
-              onPress={this.detailedPin.bind(this, marker)}>
+              onPress={this.detailedPin}>
             <View style={{justifyContent: 'center'}}>
               <Text style={{fontSize: 15, fontWeight: '500', textAlign: 'left'}}>{marker.activityCategory}</Text>
               <Text style={{fontSize: 12, fontWeight: '400', textAlign: 'left'}}>{marker.activityTitle}</Text>

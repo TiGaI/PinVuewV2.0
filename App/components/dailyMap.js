@@ -20,6 +20,8 @@ const LONGITUDE = 1;
 const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
+import DetailedPin from './detailedPin';
+
 
 class DailyMap extends Component {
 
@@ -43,6 +45,12 @@ class DailyMap extends Component {
 
     }
     // this.props.actions.getPingAroundMe(this.props.category, this.props.longitude, this.props.latitude )
+  }
+  detailedPin(coordinates){
+    this.props.navigator.push({
+      component: DetailedPin,
+      passProps: {coordinates: coordinates}
+    })
   }
   mapData(){
     console.log('GETS INSIDE MAP FUNTION',  this.props.dailyData)
@@ -94,6 +102,8 @@ class DailyMap extends Component {
               longitude: coordinates.activityLongitude
               }}
               title = {coordinates.activityTitle}
+              description = {"Total Duration" + ' ' + coordinates.activityDuration + ' ' + "hrs"}
+              onPress={this.detailedPin.bind(this, coordinates)}
               >
               <View style={{backgroundColor: pins.color,
                 borderRadius: 22.5, borderWidth: 3, borderColor: pins.color, height: 40, width: 40, padding: 5, justifyContent: 'center', alignItems: 'center'}}>

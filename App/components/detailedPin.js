@@ -74,14 +74,14 @@ class DetailedPin extends Component {
 
     return (
       <View style={{flex: 1}}>
-      {this.props.profile.userObject === null ? (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      {this.props.profile.userObject === null ? (<View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start'}}>
       <Text>Category: {this.props.marker.activityCategory}</Text>
       <Text>Title: {this.props.marker.activityTitle}</Text>
       <Text>Description: {this.props.marker.activityDescription}</Text>
       <Text>Duration: {this.props.marker.activityDuration} hr(s)</Text>
       <Text>Start Time: {this.props.marker.activityStartTime}</Text>
       </View>)
-      : (  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      : (  <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start'}}>
         {this.props.profile.userObject._id === this.props.marker.activityCreator[0] ?
           <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
           <TouchableOpacity onPress={this.delete.bind(this)}>

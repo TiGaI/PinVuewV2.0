@@ -109,13 +109,7 @@ class ProfilePage extends Component{
 
                       <View style={{flex: 1, backgroundColor:'white', justifyContent: 'center', alignItems: 'center', padding: 10}}>
 
-                      <View style={{flex: 1, flexDirection: 'row'}}>
-                      <Icon style={{fontSize: 35, color: '#00A8FF', flex: 1, textAlign: 'center'}} name='md-people'></Icon>
-                      <View style={{flex: 2}}>
-                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 12, marginTop: 5}}>Followers</Text>
-                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>1,023</Text>
-                      </View>
-                      </View>
+        
                       <View style={{flex: 1, flexDirection: 'row'}}>
                       <Icon style={{flex: 1,fontSize: 35, color: '#FF514E', textAlign: 'center'}} name='md-pin'></Icon>
                       <View style={{flex: 2}}>
