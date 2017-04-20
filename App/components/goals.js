@@ -14,6 +14,32 @@ import Slider from 'react-native-slider'
 import Picker from 'react-native-wheel-picker'
 var PickerItem = Picker.Item;
 
+import PushNotification from 'react-native-push-notification';
+
+PushNotification.configure({
+
+    // (optional) Called when Token is generated (iOS and Android)
+    onRegister: function(token) {
+        console.log( 'TOKEN:', token );
+    },
+
+    // (required) Called when a remote or local notification is opened or received
+    onNotification: function(notification) {
+        console.log( 'NOTIFICATION:', notification );
+    },
+
+    permissions: {
+        alert: true,
+        badge: true,
+        sound: true
+    },
+
+    popInitialNotification: true,
+
+    requestPermissions: true,
+});
+
+
 class Goals extends Component{
   constructor(props){
     super(props);
@@ -94,7 +120,11 @@ class Goals extends Component{
       if (m < 10) m = '0' + m;
       if (d < 10) d = '0' + d;
       var formatDate = d + '/' + m + '/' + currentDate.getFullYear()
-      var activity = this.props.profile.userObject.sortedPing[formatDate]
+      if(this.props.profile.userObject.sortedPing[formatDate] != undefined){
+        var activity = this.props.profile.userObject.sortedPing[formatDate]
+      }else{
+        var activity = {}
+      }
 
       var goals = goalObject.map((x) => {
 
@@ -103,7 +133,6 @@ class Goals extends Component{
         }else{
             var currentProgress = 0
         }
-        console.log(x.activityCategory, '   ', currentProgress)
          return (
             <ListItem>
             <Icon

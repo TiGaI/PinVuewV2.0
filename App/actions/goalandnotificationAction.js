@@ -2,7 +2,7 @@ export function getMyGoals(userID) {
     return dispatch => {
         dispatch(fetching());
 
-        fetch('http://localhost:8080/getMyGoals', {
+        fetch('http://172.20.14.143:8080/getMyGoals', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ export function createGoal(goalObject, mygoalarray) {
     return dispatch => {
         dispatch(fetching());
         console.log(goalObject, ' is the goalObject in goalandnotificationAction')
-        fetch('http://localhost:8080/createGoal', {
+        fetch('http://172.20.14.143:8080/createGoal', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -56,7 +56,7 @@ export function editGoal(goalID, goalObject, mygoalarray) {
         dispatch(fetching());
         console.log(goalID, ' in editGoalAction');
         console.log(goalObject, ' in editGoalAction')
-        fetch('http://localhost:8080/editGoal', {
+        fetch('http://172.20.14.143:8080/editGoal', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -94,7 +94,7 @@ export function deleteGoal(goalID, mygoalarray) {
     return dispatch => {
         dispatch(fetching());
 
-        fetch('http://localhost:8080/deleteGoal', {
+        fetch('http://172.20.14.143:8080/deleteGoal', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'

@@ -12,7 +12,7 @@ export function getGraphData(userID, myActivity) {
     return dispatch => {
         dispatch(attempt());
 
-          fetch('http://localhost:8080/getSortandGroupActivity', {
+          fetch('http://172.20.14.143:8080/getSortandGroupActivity', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
@@ -70,7 +70,7 @@ export function googleLogin(){
       GoogleSignin.signIn().then((user) => {
 
             var mongooseId = '';
-            fetch('http://localhost:8080/googleAuth', {
+            fetch('http://172.20.14.143:8080/googleAuth', {
                 method: 'POST',
                 headers: {
                   "Content-Type": "application/json"
@@ -132,7 +132,7 @@ export function login() {
 
         facebookLogin().then((result) => {
           var mongooseId = '';
-          fetch('http://localhost:8080/facebookAuth', {
+          fetch('http://172.20.14.143:8080/facebookAuth', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
@@ -168,7 +168,7 @@ export function editProfile(userID, userObject) {
     return dispatch => {
         dispatch(attempt());
 
-          fetch('http://localhost:8080/editUser', {
+          fetch('http://172.20.14.143:8080/editUser', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"

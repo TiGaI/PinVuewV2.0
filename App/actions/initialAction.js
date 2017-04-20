@@ -3,7 +3,7 @@ export function joinActivity(activityID, userID) {
     return dispatch => {
         dispatch(fetching());
 
-        fetch('http://localhost:8080/joinActivity', {
+        fetch('http://172.20.14.143:8080/joinActivity', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -28,7 +28,7 @@ export function editActivity(activityID, activityCreatorId, activityObject){
   console.log("INSIDE EDIT ACTIVITY", activityID, activityCreatorId, activityObject)
   return dispatch => {
     dispatch(fetching());
-    fetch('http://localhost:8080/editActivity', {
+    fetch('http://172.20.14.143:8080/editActivity', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -52,7 +52,7 @@ export function editActivity(activityID, activityCreatorId, activityObject){
 export function deleteActivity(activityID, activityCreatorId){
   return dispatch => {
     dispatch(fetching());
-    fetch('http://localhost:8080/deleteActivity', {
+    fetch('http://172.20.14.143:8080/deleteActivity', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -85,7 +85,7 @@ export function getAllUserActivities(userId){
   console.log('INSIDE GET ALL USER ACTIVITIES', userId)
   return dispatch => {
     dispatch(fetching());
-    fetch('http://localhost:8080/getAllUserActivities', {
+    fetch('http://172.20.14.143:8080/getAllUserActivities', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -107,35 +107,9 @@ export function getAllUserActivities(userId){
   };
 }
 
-
-export function leaveActivity(activityID, userID) {
-    return dispatch => {
-        dispatch(fetching());
-
-        fetch('http://localhost:8080/leaveActivity', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                userID: userID,
-                activityID: activityID
-              })
-            })
-            .then((response) => response.json())
-            .then((responseJson) => {
-              //socket emit
-                dispatch(doneFetching())
-            })
-            .catch((err) => {
-              console.log('error in populatedActivities -> ', err)
-            });
-    };
-}
-
 export function createActivity(activityObject) {
     return dispatch => {
-        fetch('http://localhost:8080/createActivity', {
+        fetch('http://172.20.14.143:8080/createActivity', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -155,7 +129,7 @@ export function getPingAroundMe(category, lat, lon) {
   return dispatch => {
       dispatch(fetching());
 
-      fetch('http://localhost:8080/getPingsAroundMe', {
+      fetch('http://172.20.14.143:8080/getPingsAroundMe', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -191,7 +165,7 @@ export function getnotifications(currentUserID){
         dispatch(fetching());
         console.log('currentUserID in getNotifications in initialAction: ', currentUserID);
 
-        fetch('http://localhost:8080/getNotification', {
+        fetch('http://172.20.14.143:8080/getNotification', {
               method: 'POST',
               headers: {
                 'Accept': 'application/json',
@@ -219,7 +193,7 @@ export function getnotifications(currentUserID){
 export function saveNotification(){
   return dispatch => {
 
-        fetch('http://localhost:8080/addActionsToNotification', {
+        fetch('http://172.20.14.143:8080/addActionsToNotification', {
               method: 'POST',
               headers: {
                 'Accept': 'application/json',

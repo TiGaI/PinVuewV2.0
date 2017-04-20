@@ -3,7 +3,10 @@ var express = require('express');
 var router = express.Router();
 
 const User= require('../models/models').User;
-
+router.post('/', function(req, res) {
+  console.log('hello world');
+   res.send('asdasdasdasddasdas')
+});
 // TODO: message
 //Get User get the conversation of each connection.
 router.post('/facebookAuth', function(req, res) {
