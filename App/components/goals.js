@@ -17,9 +17,9 @@ var PickerItem = Picker.Item;
 class Goals extends Component{
   constructor(props){
     super(props);
-    if(this.props.profile.userObject){
-      this.props.actions.getMyGoals(this.props.profile.userObject._id);
-    }
+
+    this.props.actions.getMyGoals(this.props.profile.userObject._id);
+
     this.state = {
       isOpen: false,
       isDisabled: false,
@@ -85,33 +85,51 @@ class Goals extends Component{
   }
   render() {
     var goalObject = this.props.goal.myGoals
-    console.log(this.props.profile.userObject)
+
+    console.log(this.props.goal)
     if(goalObject){
+      var currentDate = new Date();
+      var m = currentDate.getMonth() + 1
+      var d = currentDate.getDate()
+      if (m < 10) m = '0' + m;
+      if (d < 10) d = '0' + d;
+      var formatDate = d + '/' + m + '/' + currentDate.getFullYear()
+      var activity = this.props.profile.userObject.sortedPing[formatDate]
 
       var goals = goalObject.map((x) => {
+
+        if(x.activityCategory in activity){
+            var currentProgress = activity[x.activityCategory]['totalHoursForThisCategory']
+        }else{
+            var currentProgress = 0
+        }
+        console.log(x.activityCategory, '   ', currentProgress)
          return (
             <ListItem>
-
             <Icon
-              name='delete'
+             type='evilicon'
+              name='trash'
               onPress={this.deleteGoal.bind(this, x._id)}
               />
-                <Text>Daily Goal: {x.activityCategory} for {x.activityGoal} hrs</Text>
+                <Text>Daily {x.activityCategory} Goal:  {currentProgress} / {x.activityGoal} hrs </Text>
 
               <View  style={{flex: 1, flexDirection:'row', justifyContent:'flex-end', alignItems: 'flex-end', alignSelf: 'flex-end'}} >
 
                 <Icon
-                name='mode-edit'
+                type='evilicon'
+                 name='pencil'
                 onPress={this.editGoal.bind(this, x)}
                 />
 
-
-                  <Radio selected={true} />
+              {currentProgress >= x.activityGoal ? <Icon
+                type='evilicon'
+                 name='trophy'
+                      color='#1EBC72'
+                    /> : <Icon
+                            name='hourglass-empty'
+                            color='#E23A20'
+                          />}
               </View>
-
-
-
-
             </ListItem>
       )})
     }
