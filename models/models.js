@@ -45,14 +45,12 @@ var activitySchema = new mongoose.Schema({
   //How can we keep track of User Activity?
   activityCreator: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   activityTitle: {
-    type: String,
-    required: true
+    type: String
   },
   activityImages: String,
-  activityDescription: {
+  activityNote: {
     type: String,
     default: "",
-    required: true
   },
   activityLatitude: {
     type: Number,
@@ -69,6 +67,9 @@ var activitySchema = new mongoose.Schema({
   activityDuration: {
     type: Number,
     required: true
+  },
+  activityTrueHour: {
+    type: Number
   },
   activityStartTime: {
     type: Date,
@@ -104,34 +105,13 @@ var goalsSchema = new mongoose.Schema({
   { timestamps: true }
 );
 
-var notificationsSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
-  },
-  activity: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'Activity'
-  },
-  actionNumber: {
-    type: Number,
-    required: true
-  }
-  },
-  { timestamps: true }
-);
-
 
 var User = mongoose.model("User", userSchema);
 var Activity = mongoose.model("Activity", activitySchema);
-var Usernotification = mongoose.model("Usernotification", notificationsSchema);
 var Goal = mongoose.model("Goal", goalsSchema);
 
 module.exports = {
   User: User,
   Activity: Activity,
-  Usernotification: Usernotification,
   Goal: Goal
 };

@@ -3,26 +3,26 @@ var express = require('express');
 var router = express.Router();
 const apn = require('apn');
 
-// let token = ['7b3f9bb2c8836269e87cf68de22ae79710bf7fe309cdc43aa70cf0239008035d']
-//
-// let service = new apn.Provider({
-//   cert: "cert.pem",
-//   key: "key.pem"
-// })
-//
-// let note = new apn.Notification({
-//   alert: 'Notification testing'
-// })
-//
-// note.topic = "org.reactjs.native.example.PinVuew";
-//
-// service.send(note, token).then(result => {
-//   console.log('success: ', result.sent.length);
-//   console.log('failed: ', result.failed.length);
-//   console.log(result.failed)
-// })
-//
-// service.shutdown()
+let token = ['7b3f9bb2c8836269e87cf68de22ae79710bf7fe309cdc43aa70cf0239008035d']
+
+let service = new apn.Provider({
+  cert: "cert.pem",
+  key: "key.pem"
+})
+
+let note = new apn.Notification({
+  alert: 'Notification testing'
+})
+
+note.topic = "org.reactjs.native.example.PinVuew";
+
+service.send(note, token).then(result => {
+  console.log('success: ', result.sent.length);
+  console.log('failed: ', result.failed.length);
+  console.log(result.failed)
+})
+
+service.shutdown()
 
 //model
 const User  = require('../models/models').User;
