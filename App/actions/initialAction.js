@@ -91,7 +91,7 @@ export function createActivity(activityObject, photo) {
           name: activityObject.activityCreator + Date.now() +'.img',
           type: photo.mime
       }
-      copy['image'] = "https://your-bucket.s3.amazonaws.com/uploads%2"+file.name
+      copy['image'] = "https://your-bucket.s3.amazonaws.com/uploads%2F"+file.name
   }else{
       copy['image'] = null
   }
