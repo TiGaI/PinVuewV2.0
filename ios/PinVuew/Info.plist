@@ -88,7 +88,13 @@
       </dict>
     </dict>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string/>
+    <string>I need this so that we can see where the user is at then help the user track where they being.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>I need this so that users can upload videos</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>I need this so that users can upload videos</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>I need this so users can upload photos</string>
     <key>UIAppFonts</key>
     <array>
       <string>Entypo.ttf</string>

@@ -44,10 +44,7 @@ var userSchema = new mongoose.Schema({
 var activitySchema = new mongoose.Schema({
   //How can we keep track of User Activity?
   activityCreator: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-  activityTitle: {
-    type: String
-  },
-  activityImages: String,
+  activityImage: String,
   activityNote: {
     type: String,
     default: "",
@@ -70,10 +67,6 @@ var activitySchema = new mongoose.Schema({
   },
   activityTrueHour: {
     type: Number
-  },
-  activityStartTime: {
-    type: Date,
-    required: true
   }
 },
 { timestamps: true }

@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet,
   Text, View, TextInput, TouchableOpacity, NavigatorIOS,
-  ListView, Alert, AsyncStorage, TouchableHighlight, ImagePickerIOS, Image } from 'react-native';
+  ListView, Alert, AsyncStorage, TouchableHighlight, ImagePickerIOS, Image,
+  NativeModules, Dimensions } from 'react-native';
   import { Container, Content, Left, Body, Header, Right, ListItem, Thumbnail, Card, Title, CardItem, Item, Input, Label,  Button} from 'native-base';
 
   import { connect } from 'react-redux';
@@ -12,6 +13,9 @@ import { AppRegistry, ScrollView, StyleSheet,
   import * as loginAction from '../actions/loginAction';
   import Icon from 'react-native-vector-icons/Ionicons';
 
+  import Video from 'react-native-video';
+  import ImagePicker from 'react-native-image-crop-picker';
+  import { RNS3 } from 'react-native-aws3';
 
   //Import navigation components
   import MainPage from './mainPage';
@@ -53,42 +57,21 @@ import { AppRegistry, ScrollView, StyleSheet,
   };
 
   var Activity = t.struct({
-    activityTitle: t.String,
-    activityDescription: t.String,
+    activityNote: t.String,
     activityCategory: nameofthecategory,
-    activityStartTime: t.Date,
     activityDuration: numberofhours
   });
 
   var options = {
     fields: {
-      timeStart: {
-        mode: 'time'
-      },
-      activityTitle: {
-        label: 'Title',
-        placeholder: 'Activity Title',
-        error: 'Title Required'
-      },
-      activityDescription: {
+      activityNote: {
         label: 'Description',
-        placeholder: 'Activity Description',
-        error: 'Description Required'
+        placeholder: 'Note',
       },
       activityCategory: {
         label: 'Select Category',
         placeholder: 'Select a category',
         error: 'Category Required'
-      },
-      activityCapacity: {
-        label: 'Capacity',
-        placeholder: 'Activity Capacity',
-        error: 'Capacity Required or Must be a number'
-      },
-      activityStartTime: {
-        label: 'Select Start Time',
-        placeholder: 'Select a category',
-        error: 'Start Time Required'
       },
       activityDuration: {
         label: 'Activity Duration',
@@ -113,7 +96,8 @@ import { AppRegistry, ScrollView, StyleSheet,
           latitude: this.props.latitude,
           longitude: this.props.longitude
         },
-        photoData: null
+        image: null,
+        images: null
       };
     },
 
@@ -121,121 +105,126 @@ import { AppRegistry, ScrollView, StyleSheet,
     },
 
 
-    pickImage() {
-      // openSelectDialog(config, successCallback, errorCallback);
-      var date = Date.now();
-      var imgTitle =  this.props.profile.userObject.email + date + '.jpg';
-      ImagePickerIOS.openSelectDialog({},
-        resp => {
-          var formData = new FormData();
-          formData.append('file', {
-            uri: resp,
-            type: 'image/jpeg',
-            name:  imgTitle
-          });
-          this.setState({photoData: formData});
-          //    fetch('http://localhost:8080/postToS3', {
-          //      method: 'POST',
-          //      headers: {
-          //        'Content-Type': 'multipart/form-data'
-          //      },
-          //      body: formData
-          //    })
-          //    .then(resp => resp.json())
-          //    .then(resp => {
-          //      console.log('success upload', resp);
-          //      photo = resp.file.location;
-          //    })
-          //    .catch(resp => console.log('err upload', resp));
-        },
-        resp => console.log('err', resp));
-        // console.log("IMAGE PICKER IOS", ImagePickerIOS.openSelectDialog)
-
-      },
-
       onChange(value) {
         this.setState({ value });
       },
+      pickSingleWithCamera(cropping) {
+        ImagePicker.openCamera({
+          cropping: cropping,
+          width: 500,
+          height: 500,
+        }).then(image => {
+          console.log('received image', image);
+          this.setState({
+            image: {uri: image.path, width: image.width, height: image.height},
+            images: null
+          });
+        }).catch(e => alert(e));
+      },
 
+      pickSingleBase64(cropit) {
+        ImagePicker.openPicker({
+          width: 300,
+          height: 300,
+          cropping: cropit,
+          includeBase64: true
+        }).then(image => {
+          console.log('received base64 image');
+          this.setState({
+            image: {uri: `data:${image.mime};base64,`+ image.data, width: image.width, height: image.height},
+            images: null
+          });
+        }).catch(e => alert(e));
+      },
+
+      cleanupImages() {
+        ImagePicker.clean().then(() => {
+          console.log('removed tmp images from tmp directory');
+        }).catch(e => {
+          alert(e);
+        });
+      },
+
+      cleanupSingleImage() {
+        let image = this.state.image || (this.state.images && this.state.images.length ? this.state.images[0] : null);
+        console.log('will cleanup image', image);
+
+        ImagePicker.cleanSingle(image ? image.uri : null).then(() => {
+          console.log(`removed tmp image ${image.uri} from tmp directory`);
+        }).catch(e => {
+          alert(e);
+        })
+      },
+      pickSingle(cropit, circular=false) {
+        ImagePicker.openPicker({
+          width: 300,
+          height: 300,
+          cropping: cropit,
+          cropperCircleOverlay: circular,
+          compressImageMaxWidth: 640,
+          compressImageMaxHeight: 480,
+          compressImageQuality: 0.5,
+          compressVideoPreset: 'MediumQuality',
+        }).then(image => {
+          console.log('received image', image);
+          this.setState({
+            image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
+            images: null
+          });
+        }).catch(e => {
+          console.log(e);
+          Alert.alert(e.message ? e.message : e);
+        });
+      },
+      scaledHeight(oldW, oldH, newW) {
+        return (oldH / oldW) * newW;
+      },
+      renderVideo(video) {
+        return (<View style={{height: 300, width: 300}}>
+          <Video source={{uri: video.uri, type: video.mime}}
+             style={{position: 'absolute',
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0
+              }}
+             rate={1}
+             paused={false}
+             volume={1}
+             muted={false}
+             resizeMode={'cover'}
+             onError={e => console.log(e)}
+             onLoad={load => console.log(load)}
+             repeat={true} />
+         </View>);
+      },
+
+      renderImage(image) {
+        return <Image style={{width: 300, height: 300, resizeMode: 'contain'}} source={image} />
+      },
+
+      renderAsset(image) {
+        if (image.mime && image.mime.toLowerCase().indexOf('video/') !== -1) {
+          return this.renderVideo(image);
+        }
+
+        return this.renderImage(image);
+      },
       onPress: function (){
-        // var self = this
-        // console.log("PHotoData", self.state.photoData)
-        // var s3 = function(self){
-        //   console.log("IN S3")
-        //   return fetch('http://localhost:8080/postToS3', {
-        //       method: 'POST',
-        //       headers: {
-        //         'Content-Type': 'multipart/form-data'
-        //       },
-        //       body: photo
-        //     })
-        //     .then(resp => resp.json())
-        //     .then(resp => {
-        //       console.log('success upload', resp.file.location);
-        //       copy["activityImages"] = [resp.file.location];
-        //       return copy;
-        //     })
-        // }
-        // var createActivity = function() {
-        //   console.log("CreactActivity", copy)
-        //   return fetch("http://localhost:8080/createActivity", {
-        //     method: 'POST',
-        //     headers: {
-        //       "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify({
-        //       activity: copy
-        //     })
-        //   })
-        // }
-        // var doMyShit = function(photoAdded){
-        //   console.log("IS PHOTO ADDED", photoAdded)
-        //   if (photoAdded){
-        //     return s3(self).then(createActivity).catch((resp => console.log('err upload', resp)));
-        //   } else {
-        //     return createActivity().catch((resp => console.log('err upload', resp)));
-        //   }
-        // }
         var value = this.refs.form.getValue();
         if (value) {
           var activityObject = Object.assign({}, value);
           activityObject.activityLatitude = this.props.latitude;
           activityObject.activityLongitude = this.props.longitude;
           activityObject.activityCreator = this.props.profile.userObject._id;
+          
+        this.props.actions.createActivity(activityObject, this.state.image)
 
-
-        this.props.actions.createActivity(activityObject)
-        this.props.navigator.replace({
-          component: MainPage
-        })
+        // this.props.navigator.replace({
+        //   component: MainPage
+        // })
 
         }
-        //   fetch('http://localhost:8080/postToS3', {
-        //     method: 'POST',
-        //     headers: {
-        //       'Content-Type': 'multipart/form-data'
-        //     },
-        //     body: photoData
-        //   })
-        //   .then(resp => resp.json())
-        //   .then(resp => {
-        //     console.log('success upload', resp);
-        //     copy["activityImages"] = [resp.file.location];
-        //   }).then(() => {
-        //     fetch("http://localhost:8080/createActivity", {
-        //       method: 'POST',
-        //       headers: {
-        //         "Content-Type": "application/json"
-        //       },
-        //       body:
-        //       JSON.stringify({
-        //         activity: copy
-        //       })
-        //     })
-        //     photoData = null;
-        //   }).catch(resp => console.log('err upload', resp));
-        // }
-        // this.setState({photo: ["defaultimage.jpg"]});
       },
 
       render() {
@@ -251,6 +240,8 @@ import { AppRegistry, ScrollView, StyleSheet,
           value={this.state.value}
           onChange ={this.onChange.bind(this)}
           />
+
+
           <View style={{flex: 1, flexDirection: 'row'}}>
           <TouchableOpacity style={{flex: 1, backgroundColor: 'white' ,borderWidth: 2, borderColor: 'grey', height: 70, borderRightWidth: 0}} onPress={this.pickImage}>
           <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -266,9 +257,44 @@ import { AppRegistry, ScrollView, StyleSheet,
           </TouchableOpacity>
           </View>
 
+
+
+                    {this.state.image ? this.renderAsset(this.state.image) : null}
+                    {this.state.images ? this.state.images.map(i => <View key={i.uri}>{this.renderAsset(i)}</View>) : null}
+
+
+                    <TouchableOpacity onPress={() => this.pickSingleWithCamera(false)} style={styles.button}>
+                      <Text style={styles.text}>Select Single With Camera</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.pickSingleWithCamera(true)} style={styles.button}>
+                      <Text style={styles.text}>Select Single With Camera With Cropping</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.pickSingle(false)} style={styles.button}>
+                      <Text style={styles.text}>Select Single</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.pickSingleBase64(false)} style={styles.button}>
+                      <Text style={styles.text}>Select Single Returning Base64</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.pickSingle(true)} style={styles.button}>
+                      <Text style={styles.text}>Select Single With Cropping</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.pickSingle(true, true)} style={styles.button}>
+                      <Text style={styles.text}>Select Single With Circular Cropping</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.cleanupImages.bind(this)} style={styles.button}>
+                      <Text style={styles.text}>Cleanup All Images</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.cleanupSingleImage.bind(this)} style={styles.button}>
+                      <Text style={styles.text}>Cleanup Single Image</Text>
+                    </TouchableOpacity>
+
           </ScrollView>
 
+
+
           </View>
+
+
 
         )
       }

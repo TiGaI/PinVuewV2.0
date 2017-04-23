@@ -114,8 +114,6 @@ router.post('/getPingsAroundMe', function(req, res){
           {'activityCategory' : {'$in': req.body.category}}
         ]}).sort('-createdAt').limit(20).exec(function(err, activities){
 
-          console.log('activities: ', activities)
-
           if(err){
             console.log(err, 'errororororororro');
             res.send(err);
@@ -206,10 +204,13 @@ router.post('/getAllUserActivities', function(req,res){
   })
 })
 
-
 router.post('/createActivity', function(req, res){
+
+
+
   var activity = req.body.activity;
   Activity.findOne({$and: [
+          {'activityCreator': activity.activityCreator},
           {'activityLatitude': activity.activityLatitude},
           {'activityLongitude': activity.activityLongitude}]}).exec(function(err, activities){
 
@@ -221,22 +222,15 @@ router.post('/createActivity', function(req, res){
 
         if(!activities){
 
-          Activity.find({$and: [
-                  {'createdAt': {'$lt': new Date(Date.now() - 24*60*60*1000)}},
-                  {'activityCreator': activity.activityCreator}
-                ]}).exec(function(err, activities){
-
-              if(activities.length <= 10){
-
                 var newActivity = new Activity({
                       activityCreator: activity.activityCreator,
-                      activityTitle: activity.activityTitle,
-                      activityDescription: activity.activityDescription,
+                      activityNote: activity.activityNote,
                       activityCategory: activity.activityCategory,
                       activityLatitude: activity.activityLatitude,
                       activityLongitude: activity.activityLongitude,
-                      activityStartTime: activity.activityStartTime,
-                      activityDuration: activity.activityDuration
+                      activityDuration: activity.activityDuration,
+                      activityImage: activity.image ? activity.image : ''
+                      // activityVideo: req.files['video'] ? req.files['video'][0].location : ''
                     })
 
                     newActivity.save(function(err, activityNew){
@@ -252,29 +246,20 @@ router.post('/createActivity', function(req, res){
                           user.save(function(err){
                             if (err) {
                               console.log('error has occur: ',  err)
-                              res.send(newActivity)
+                              res.send(activityNew)
                             } else {
                               console.log('Nice, activity added in the user model')
+                              res.send(activityNew)
                             }
                           })
                         })
                       }
                     })
 
-              }else{
-                console.log('you have already created two activities');
-                res.send('you already created two activites within this 24 hours!')
-              }
-          })
-
-
         }else{
           console.log('activities already exist!');
           return null;
         }
-
-        res.send(activities);
-        return activities;
   });
 
 });

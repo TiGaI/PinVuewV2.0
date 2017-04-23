@@ -1,34 +1,11 @@
-export function joinActivity(activityID, userID) {
-  console.log("INSIDE JOIN ACTIVITY", activityID, userID)
-    return dispatch => {
-        dispatch(fetching());
-
-        fetch('http://172.20.14.143:8080/joinActivity', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                userID: userID,
-                activityID: activityID
-              })
-            })
-            .then((response) => response.json())
-            .then((responseJson) => {
-               //socket emit
-                dispatch(doneFetching())
-            })
-            .catch((err) => {
-              console.log('error in populatedActivities -> ', err)
-            });
-    };
-}
+import { RNS3 } from 'react-native-aws3';
+var Environment = require('../Environment.js')
 
 export function editActivity(activityID, activityCreatorId, activityObject){
   console.log("INSIDE EDIT ACTIVITY", activityID, activityCreatorId, activityObject)
   return dispatch => {
     dispatch(fetching());
-    fetch('http://172.20.14.143:8080/editActivity', {
+    fetch('http://localhost:8080/editActivity', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -52,7 +29,7 @@ export function editActivity(activityID, activityCreatorId, activityObject){
 export function deleteActivity(activityID, activityCreatorId){
   return dispatch => {
     dispatch(fetching());
-    fetch('http://172.20.14.143:8080/deleteActivity', {
+    fetch('http://localhost:8080/deleteActivity', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -76,8 +53,6 @@ export function passGoalObject(goalObject){
   return dispatch => {
     dispatch(fetching());
     dispatch(passGoals(goalObject));
-    console.log('PASSED')
-
   };
 }
 
@@ -85,7 +60,7 @@ export function getAllUserActivities(userId){
   console.log('INSIDE GET ALL USER ACTIVITIES', userId)
   return dispatch => {
     dispatch(fetching());
-    fetch('http://172.20.14.143:8080/getAllUserActivities', {
+    fetch('http://localhost:8080/getAllUserActivities', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -107,16 +82,51 @@ export function getAllUserActivities(userId){
   };
 }
 
-export function createActivity(activityObject) {
+export function createActivity(activityObject, photo) {
+  if(photo){
+      var copy = Object.assign({}, activityObject)
+      var file = {
+          // `uri` can also be a file system path (i.e. file://)
+          uri: photo.uri,
+          name: activityObject.activityCreator + Date.now() +'.img',
+          type: photo.mime
+      }
+      copy['image'] = "https://your-bucket.s3.amazonaws.com/uploads%2"+file.name
+  }else{
+      copy['image'] = null
+  }
+
     return dispatch => {
-        fetch('http://172.20.14.143:8080/createActivity', {
+        fetch('http://localhost:8080/createActivity', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                activity: activityObject
+                activity: copy
               })
+            }).then((response) => response.json())
+            .then(responseJson => {
+
+              console.log('this is reponseJson: ', process.env.AWS_DEFAULT_REGION)
+                if(responseJson.activityImage){
+                  var options = {
+                    keyPrefix: "uploads/",
+                    bucket: "newvuew",
+                    region: Environment.AWS_DEFAULT_REGION,
+                    accessKey: Environment.AWS_ACCESS_KEY_ID,
+                    secretKey: Environment.AWS_SECRET_ACCESS_KEY,
+                    successActionStatus: 201
+                  }
+
+                  RNS3.put(file, options).then(response => {
+                    if (response.status !== 201)
+                      throw new Error("Failed to upload image to S3");
+                    console.log(response.body);
+                  });
+                }
+
+
             })
             .catch((err) => {
               console.log('error in createActivity -> ', err)
@@ -125,11 +135,10 @@ export function createActivity(activityObject) {
 }
 
 export function getPingAroundMe(category, lat, lon) {
-    console.log('INSIDE GET PING AROUND ME', category, lat, lon)
   return dispatch => {
       dispatch(fetching());
 
-      fetch('http://172.20.14.143:8080/getPingsAroundMe', {
+      fetch('http://localhost:8080/getPingsAroundMe', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -165,7 +174,7 @@ export function getnotifications(currentUserID){
         dispatch(fetching());
         console.log('currentUserID in getNotifications in initialAction: ', currentUserID);
 
-        fetch('http://172.20.14.143:8080/getNotification', {
+        fetch('http://localhost:8080/getNotification', {
               method: 'POST',
               headers: {
                 'Accept': 'application/json',
@@ -193,7 +202,7 @@ export function getnotifications(currentUserID){
 export function saveNotification(){
   return dispatch => {
 
-        fetch('http://172.20.14.143:8080/addActionsToNotification', {
+        fetch('http://localhost:8080/addActionsToNotification', {
               method: 'POST',
               headers: {
                 'Accept': 'application/json',

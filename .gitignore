@@ -38,7 +38,7 @@ yarn-error.log
 env.sh
 cert.pem
 key.pem
-services/actionRoute.js
+App/Environment.js
 
 # BUCK
 buck-out/
