@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
-import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body, Fab } from 'native-base';
+import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body } from 'native-base';
 import Icons from 'react-native-vector-icons/Ionicons';
 
 import { connect } from 'react-redux';
@@ -29,7 +29,7 @@ const ASPECT_RATIO = width / height;
 const LATITUDE = 1;
 const LONGITUDE = 1;
 
-const LATITUDE_DELTA = 0.01;
+const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 class MainPage extends Component {
 
@@ -49,11 +49,13 @@ class MainPage extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
-      active: 'true'
 
     }
   }
-  componentDidMount(){
+
+    watchID: ?number = null;
+
+  componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         var initialPosition = JSON.stringify(position);
@@ -64,25 +66,25 @@ class MainPage extends Component {
           longitudeDelta: LONGITUDE_DELTA
 
         }});
-
       },
-      (error) => alert(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 0}
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
-      this.watchID = navigator.geolocation.watchPosition((position) => {
-      var currentPosition = JSON.stringify(position);
+    this.watchID = navigator.geolocation.watchPosition((position) => {
+      var lastPosition = JSON.stringify(position);
       this.setState({currentPosition: {
-        latitude: (position.coords.latitude) / 1.00022741,
-        longitude: position.coords.longitude - 0.001,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       }});
-
-    });
+    },
+    );
   }
-  componentWillUnmount (){
-  navigator.geolocation.clearWatch(this.watchID);
-}
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchID);
+  }
   category(){
     this.props.navigator.push({
       component: Categories,
@@ -104,97 +106,81 @@ class MainPage extends Component {
     })
   }
   render() {
-    console.log('dakmdsamldamdasmdlsaalmdm', this.props, this.state.currentPosition.latitude,this.state.currentPosition.longitude )
+    console.log(this.props)
+    console.log('INITIAL POSITION', this.state.initialPosition.latitude, this.state.initialPosition.longitude);
+    console.log('CURRENT POSITION', this.state.currentPosition.latitude, this.state.currentPosition.longitude)
     return(
       <View style={{flex: 1}}>
-        {this.state.currentPosition.latitude !== 1 ? (
-          <MapView
-           resizeMode = "stretch"
-            style={{flex: 1, height: null, width: null}}
-            initialRegion={{
-              latitude: this.state.currentPosition.latitude,
-              longitude: this.state.currentPosition.longitude,
-              latitudeDelta: this.state.currentPosition.latitudeDelta,
-              longitudeDelta: this.state.currentPosition.longitudeDelta,
-            }}
-          >
-           <MapView.Marker
-             coordinate={{latitude: this.state.currentPosition.latitude,
-             longitude: this.state.currentPosition.longitude,
-             latitudeDelta: this.state.currentPosition.latitudeDelta,
-             longitudeDelta: this.state.currentPosition.longitudeDelta,
-             }}
-             title='Title'
-             >
+      {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
+
+      <MapView
+       resizeMode = "stretch"
+        style={{flex: 1, height: null, width: null}}
+        region={{
+          latitude: this.state.currentPosition.latitude,
+          longitude: this.state.currentPosition.longitude,
+          latitudeDelta: this.state.currentPosition.latitudeDelta,
+          longitudeDelta: this.state.currentPosition.longitudeDelta,
+        }}
+      >
+       <MapView.Marker
+         coordinate={{latitude: this.state.currentPosition.latitude,
+         longitude: this.state.currentPosition.longitude
+         }}
+         title='Title'
+      />
+      <View style={{flex: 0, alignItems: 'center'}}>
+        <TouchableOpacity onPress={this.category.bind(this)}>
+              <Text
+              style={{borderColor: 'white', borderWidth: 1,borderColor: 'transparent', backgroundColor: '#00A8BE', width: 275,
+              padding: 15, color: 'white', textAlign: 'center', fontSize: 20, marginTop: 100}}
+              placeholder= 'Select a category'
+              >Find things to do... {this.state.lastPosition}</Text>
+        </TouchableOpacity >
+      {this.props.profile.userObject !== null ? (<View style={{flex: 0, justifyContent: 'flex-end'}}>
+
+          <Icon
+            raised
+            name='touch-app'
+            color='#FD4F0D'
+            onPress={() => this.createPin()} />
+
+      <Text style={{fontSize: 12, backgroundColor: 'transparent', fontWeight: '500' , marginTop: 0}}>Add Location</Text>
 
 
-             <Icons style={{fontSize: 40, color: '#00A8BE', backgroundColor: 'transparent'}} name='md-pin'/>
-           </MapView.Marker>
-
-
-          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <TouchableOpacity onPress={this.category.bind(this)}>
-                  <Text
-                  style={{borderColor: 'white', borderWidth: 1,borderColor: 'transparent', backgroundColor: '#00A8BE', width: 275,
-                  padding: 10, color: 'white', textAlign: 'center', fontSize: 20, marginTop: 100}}
-                  placeholder= 'Select a category'
-                  >View your pins... {this.state.lastPosition}</Text>
-            </TouchableOpacity >
-          <View style={{flex: 1, justifyContent: 'flex-end'}}>
-
-              <Icon
-                raised
-                name='touch-app'
-                color='#FD4F0D'
-                onPress={() => this.createPin()} />
-
-              <Text style={{fontSize: 12, backgroundColor: 'transparent', fontWeight: '500' , marginTop: -5, marginBottom: 10}}>Add Location</Text>
-
-
-          </View>
-
-          </View>
-
-          </MapView>
-
-        ) : ( <View>
-          <Text>Loading...</Text>
-        </View>)}
+      </View>) : null }
 
       </View>
-      )
-}
-}
 
+      </MapView>
+    ) : null}
+      </View>
+    )
+  }
+}
 var sports = [{name: 'Entertainment',
-              iconName: 'ios-beer',
-              color: 'red'
+              iconName: 'ios-beer'
               },
               {name: 'Exercise',
-             iconName: 'md-walk',
-             color: 'green'
+             iconName: 'md-walk'
               },
                {name: 'Food',
-             iconName: 'md-pizza',
-             color: 'orange'
+             iconName: 'md-pizza'
               },
                {name: 'Hobbies',
-             iconName: 'ios-american-football',
-             color: 'yellow'
+             iconName: 'ios-american-football'
               },
                {name: 'Relaxing',
-             iconName: 'ios-desktop',
-             color: 'purple'
+             iconName: 'ios-desktop'
               },
                {name: 'Studying',
-             iconName: 'ios-book',
-             color: 'black'
+             iconName: 'ios-book'
             },
             {name: 'Relaxing',
-            iconName: 'ios-desktop',
-            color: 'brown'
+            iconName: 'ios-desktop'
             },
            ];
+
 
 class Categories extends Component {
   constructor(props){
@@ -230,7 +216,7 @@ class Categories extends Component {
                 <ListItem>
                   <TouchableOpacity onPress={this.selectCategory.bind(this, rowData)}>
                     <Left>
-                    <Icons style={{fontSize: 30, color: 'grey', marginRight: 10, color: rowData.color, width: 30}} name={rowData.iconName}/>
+                    <Icons style={{fontSize: 30, color: 'grey', marginRight: 10}} name={rowData.iconName}/>
                     <Text style={{marginTop: 8}}>{rowData.name}</Text>
                     </Left>
 
